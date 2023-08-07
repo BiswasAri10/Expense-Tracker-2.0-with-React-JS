@@ -74,7 +74,6 @@ const AuthForm = () => {
       })
       .then((data) => {
         authCtx.login(data.idToken, enteredEmail);
-        console.log("User has successfully signed up.");
         emailInputRef.current.value = "";
         passwordInputRef.current.value = "";
         confirmPasswordInputRef.current.value = "";
