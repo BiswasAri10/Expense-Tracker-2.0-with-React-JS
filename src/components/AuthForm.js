@@ -1,10 +1,10 @@
 import { useState, useRef, useContext } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../auth-store/AuthContext";
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const confirmPasswordInputRef = useRef();
@@ -25,11 +25,7 @@ const AuthForm = () => {
     const enteredPassword = passwordInputRef.current.value;
     const enteredConfirmPassword = confirmPasswordInputRef.current.value;
 
-    if (
-      !enteredEmail ||
-      !enteredPassword ||
-      (!isLogin && !enteredConfirmPassword)
-    ) {
+    if (!enteredEmail || !enteredPassword || !enteredConfirmPassword) {
       alert("Please fill in all fields");
       return;
     }
@@ -82,7 +78,7 @@ const AuthForm = () => {
         emailInputRef.current.value = "";
         passwordInputRef.current.value = "";
         confirmPasswordInputRef.current.value = "";
-        // navigate("/store");
+        navigate("/home");
       })
       .catch((error) => {
         alert(error.message);
@@ -107,18 +103,15 @@ const AuthForm = () => {
               ref={passwordInputRef}
             />
           </div>
-          {!isLogin && (
-            <div className={classes.control}>
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                required={!isLogin}
-                ref={confirmPasswordInputRef}
-              />
-            </div>
-          )}
-
+          <div className={classes.control}>
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              required
+              ref={confirmPasswordInputRef}
+            />
+          </div>
           <div className={classes.actions}>
             {!isLoading && (
               <button>{isLogin ? "Login" : "Create Account"}</button>
