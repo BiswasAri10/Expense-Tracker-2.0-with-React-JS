@@ -4,16 +4,23 @@ const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
   email: "",
+  profileComplete: false, // New state for profile completion
   login: (token, email) => {},
   logout: () => {},
+  setProfileComplete: (isComplete) => {}, // Setter function for profile completion
 });
 
 export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem("token");
   const initialEmail = localStorage.getItem("email");
+  const initialProfileComplete =
+    localStorage.getItem("profileComplete") === "true"; // Load initial profile completion status
 
   const [token, setToken] = useState(initialToken);
   const [email, setEmail] = useState(initialEmail);
+  const [profileComplete, setProfileComplete] = useState(
+    initialProfileComplete
+  ); // New state for profile completion
 
   const [logoutTimeout, setLogoutTimeout] = useState(null);
 
@@ -34,6 +41,7 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem("token");
     setEmail("");
     localStorage.removeItem("email");
+    localStorage.removeItem("profileComplete"); // Remove profile completion status
     const currentUserEmail = localStorage.getItem("email");
     localStorage.removeItem(`cartItems_${currentUserEmail}`);
 
@@ -54,12 +62,18 @@ export const AuthContextProvider = (props) => {
     };
   }, [userIsLoggedIn]);
 
+  useEffect(() => {
+    localStorage.setItem("profileComplete", profileComplete); // Update profile completion status in local storage
+  }, [profileComplete]);
+
   const contextValue = {
     token: token,
     isLoggedIn: userIsLoggedIn,
     email: email,
+    profileComplete: profileComplete,
     login: loginHandler,
     logout: logoutHandler,
+    setProfileComplete: setProfileComplete, // Provide the setter function
   };
 
   return (

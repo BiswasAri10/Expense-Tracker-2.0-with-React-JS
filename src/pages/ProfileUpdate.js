@@ -42,9 +42,11 @@ const UpdateProfile = () => {
         );
 
         console.log("Profile updated successfully:", response.data);
+        authCtx.setProfileComplete(true);
         setFullName("");
         setProfilePhotoURL("");
         alert("Profile updated successfully!");
+        navigate("/home");
       } catch (error) {
         console.error("Error updating profile:", error);
       }
