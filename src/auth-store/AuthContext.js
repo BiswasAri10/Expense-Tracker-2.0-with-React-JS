@@ -4,23 +4,23 @@ const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
   email: "",
-  profileComplete: false, // New state for profile completion
+  profileComplete: false, 
   login: (token, email) => {},
   logout: () => {},
-  setProfileComplete: (isComplete) => {}, // Setter function for profile completion
+  setProfileComplete: (isComplete) => {}, 
 });
 
 export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem("token");
   const initialEmail = localStorage.getItem("email");
   const initialProfileComplete =
-    localStorage.getItem("profileComplete") === "true"; // Load initial profile completion status
+    localStorage.getItem("profileComplete") === "true"; 
 
   const [token, setToken] = useState(initialToken);
   const [email, setEmail] = useState(initialEmail);
   const [profileComplete, setProfileComplete] = useState(
     initialProfileComplete
-  ); // New state for profile completion
+  ); 
 
   const [logoutTimeout, setLogoutTimeout] = useState(null);
 
@@ -41,7 +41,8 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem("token");
     setEmail("");
     localStorage.removeItem("email");
-    localStorage.removeItem("profileComplete"); // Remove profile completion status
+    localStorage.removeItem("profileComplete"); 
+
     const currentUserEmail = localStorage.getItem("email");
     localStorage.removeItem(`cartItems_${currentUserEmail}`);
 
@@ -63,7 +64,7 @@ export const AuthContextProvider = (props) => {
   }, [userIsLoggedIn]);
 
   useEffect(() => {
-    localStorage.setItem("profileComplete", profileComplete); // Update profile completion status in local storage
+    localStorage.setItem("profileComplete", profileComplete); 
   }, [profileComplete]);
 
   const contextValue = {
@@ -73,7 +74,7 @@ export const AuthContextProvider = (props) => {
     profileComplete: profileComplete,
     login: loginHandler,
     logout: logoutHandler,
-    setProfileComplete: setProfileComplete, // Provide the setter function
+    setProfileComplete: setProfileComplete, 
   };
 
   return (
