@@ -1,0 +1,25 @@
+
+.home-container {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .header {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .incomplete-profile {
+    font-size: 18px;
+  }
+  
+  .logout-button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  

@@ -1,8 +1,9 @@
-import React, {useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../auth-store/AuthContext";
 import ExpenseForm from "../components/ExpenseForm";
 import ExpensesList from "../components/ExpensesList";
+import "./Home.css";
 
 import axios from "axios";
 
@@ -81,23 +82,24 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <h1>Welcome to Expense Tracker</h1>
+    <div className="home-container">
+      <h1 className="header">Welcome to Expense Tracker</h1>
       {authCtx.isLoggedIn && authCtx.profileComplete ? (
         <div>
           <p>Your profile is complete. You can start using the app now.</p>
-          <button onClick={handleLogout}>Logout</button>
           <button onClick={handleVerifyEmail}>Verify Email</button>
           <ExpenseForm onAddExpense={handleAddExpense} />
           {expenses.length > 0 && <ExpensesList expenses={expenses} />}
         </div>
       ) : (
-        <p>
+        <p className="incomplete-profile">
           Your profile is incomplete. To complete your profile{" "}
           <Link to="/profile-update">click here</Link>.
-          <button onClick={handleLogout}>Logout</button>
         </p>
       )}
+      <button className="logout-button" onClick={handleLogout}>
+        Logout
+      </button>
     </div>
   );
 };
