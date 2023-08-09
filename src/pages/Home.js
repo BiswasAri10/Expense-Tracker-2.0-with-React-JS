@@ -1,16 +1,23 @@
-import React, { useContext, useEffect } from "react";
+import React, {useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../auth-store/AuthContext";
+import ExpenseForm from "../components/ExpenseForm";
+import ExpensesList from "../components/ExpensesList";
 
 import axios from "axios";
 
 const Home = () => {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
+  const [expenses, setExpenses] = useState([]);
 
   const handleLogout = () => {
     authCtx.logout();
     navigate("/");
+  };
+
+  const handleAddExpense = (newExpense) => {
+    setExpenses([...expenses, newExpense]);
   };
 
   useEffect(() => {
@@ -81,6 +88,8 @@ const Home = () => {
           <p>Your profile is complete. You can start using the app now.</p>
           <button onClick={handleLogout}>Logout</button>
           <button onClick={handleVerifyEmail}>Verify Email</button>
+          <ExpenseForm onAddExpense={handleAddExpense} />
+          {expenses.length > 0 && <ExpensesList expenses={expenses} />}
         </div>
       ) : (
         <p>
