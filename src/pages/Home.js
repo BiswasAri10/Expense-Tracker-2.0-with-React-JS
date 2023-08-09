@@ -10,7 +10,7 @@ const Home = () => {
 
   const handleLogout = () => {
     authCtx.logout();
-    navigate('/')
+    navigate("/");
   };
 
   useEffect(() => {
@@ -60,12 +60,15 @@ const Home = () => {
           }
         );
 
-        console.log("Email verification link sent successfully:", response.data);
-        alert("Email verification link sent successfully, Please Open your Mail inbox and verify your Email");
-
+        console.log(
+          "Email verification link sent successfully:",
+          response.data
+        );
+        alert(
+          "Email verification link sent successfully, Please Open your Mail inbox and verify your Email"
+        );
       } catch (error) {
         console.error("Error sending email verification:", error);
-      
       }
     }
   };
@@ -76,13 +79,14 @@ const Home = () => {
       {authCtx.isLoggedIn && authCtx.profileComplete ? (
         <div>
           <p>Your profile is complete. You can start using the app now.</p>
-          <button onClick={handleLogout}>Logout</button> 
+          <button onClick={handleLogout}>Logout</button>
           <button onClick={handleVerifyEmail}>Verify Email</button>
         </div>
       ) : (
         <p>
           Your profile is incomplete. To complete your profile{" "}
           <Link to="/profile-update">click here</Link>.
+          <button onClick={handleLogout}>Logout</button>
         </p>
       )}
     </div>
