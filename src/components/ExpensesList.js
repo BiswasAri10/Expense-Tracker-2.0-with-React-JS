@@ -1,7 +1,7 @@
 import React from "react";
-import "./ExpensesList.css"; 
+import "./ExpensesList.css";
 
-const ExpensesList = ({ expenses }) => {
+const ExpensesList = ({ expenses, onDeleteExpense, onEditExpense }) => {
   return (
     <div className="expenses-list-container">
       <h2 className="list-header">Expenses</h2>
@@ -17,6 +17,8 @@ const ExpensesList = ({ expenses }) => {
             <div className="expense-info">
               <strong>Category:</strong> {expense.expenseCategory}
             </div>
+            <button onClick={() => onEditExpense(expense)}>Edit</button>
+            <button onClick={() => onDeleteExpense(expense)}>Delete</button>
           </div>
         ))}
       </div>
