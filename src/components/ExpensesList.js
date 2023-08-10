@@ -9,7 +9,7 @@ const ExpensesList = ({ expenses }) => {
         {expenses.map((expense, index) => (
           <div key={index} className="expense-card">
             <div className="expense-info">
-              <strong>Money Spent:</strong> ${expense.moneySpent}
+              <strong>Money Spent:</strong> Rs. {expense.moneySpent}
             </div>
             <div className="expense-info">
               <strong>Description:</strong> {expense.expenseDescription}

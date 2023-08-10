@@ -6,21 +6,39 @@ const ExpenseForm = ({ onAddExpense }) => {
   const [expenseDescription, setExpenseDescription] = useState("");
   const [expenseCategory, setExpenseCategory] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const newExpense = {
       moneySpent,
       expenseDescription,
       expenseCategory,
     };
-
-    onAddExpense(newExpense);
-
-    setMoneySpent("");
-    setExpenseDescription("");
-    setExpenseCategory("");
+  
+    try {
+      const response = await fetch(
+        "https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses.json",
+        {
+          method: "POST",
+          body: JSON.stringify(newExpense),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to add expense");
+      }
+  
+      setMoneySpent("");
+      setExpenseDescription("");
+      setExpenseCategory("");
+    } catch (error) {
+      console.error(error);
+    }
   };
+  
 
   return (
     <div className="expense-form-container">

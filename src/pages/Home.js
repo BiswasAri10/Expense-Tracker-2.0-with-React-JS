@@ -23,6 +23,30 @@ const Home = () => {
 
   useEffect(() => {
     if (authCtx.isLoggedIn) {
+      const fetchExpenses = async () => {
+        try {
+          const response = await fetch(
+            "https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses.json"
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch expenses");
+          }
+
+          const data = await response.json();
+          const expensesArray = Object.values(data);
+          setExpenses(expensesArray);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchExpenses();
+    }
+  }, [authCtx]);
+
+  useEffect(() => {
+    if (authCtx.isLoggedIn) {
       async function fetchUserProfile() {
         try {
           const response = await axios.post(
