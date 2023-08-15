@@ -4,23 +4,23 @@ const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
   email: "",
-  profileComplete: false, 
+  profileComplete: false,
   login: (token, email) => {},
   logout: () => {},
-  setProfileComplete: (isComplete) => {}, 
+  setProfileComplete: (isComplete) => {},
 });
 
 export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem("token");
   const initialEmail = localStorage.getItem("email");
   const initialProfileComplete =
-    localStorage.getItem("profileComplete") === "true"; 
+    localStorage.getItem("profileComplete") === "true";
 
   const [token, setToken] = useState(initialToken);
   const [email, setEmail] = useState(initialEmail);
   const [profileComplete, setProfileComplete] = useState(
     initialProfileComplete
-  ); 
+  );
 
   const [logoutTimeout, setLogoutTimeout] = useState(null);
 
@@ -33,6 +33,10 @@ export const AuthContextProvider = (props) => {
     setEmail(email);
     localStorage.setItem("email", email);
 
+    const initialProfileComplete =
+      localStorage.getItem("profileComplete") === "true";
+    setProfileComplete(initialProfileComplete);
+
     setLogoutTimeout(setTimeout(logoutHandler, 5 * 60 * 1000));
   };
 
@@ -41,7 +45,7 @@ export const AuthContextProvider = (props) => {
     localStorage.removeItem("token");
     setEmail("");
     localStorage.removeItem("email");
-    localStorage.removeItem("profileComplete"); 
+    localStorage.removeItem("profileComplete");
 
     const currentUserEmail = localStorage.getItem("email");
     localStorage.removeItem(`cartItems_${currentUserEmail}`);
@@ -64,7 +68,7 @@ export const AuthContextProvider = (props) => {
   }, [userIsLoggedIn]);
 
   useEffect(() => {
-    localStorage.setItem("profileComplete", profileComplete); 
+    localStorage.setItem("profileComplete", profileComplete);
   }, [profileComplete]);
 
   const contextValue = {
@@ -74,7 +78,7 @@ export const AuthContextProvider = (props) => {
     profileComplete: profileComplete,
     login: loginHandler,
     logout: logoutHandler,
-    setProfileComplete: setProfileComplete, 
+    setProfileComplete: setProfileComplete,
   };
 
   return (

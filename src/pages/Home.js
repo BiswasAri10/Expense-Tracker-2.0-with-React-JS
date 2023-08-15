@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../auth-store/AuthContext";
 import ExpenseManager from "../components/ExpenseManager";
@@ -9,6 +9,37 @@ import axios from "axios";
 const Home = () => {
   const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authCtx.isLoggedIn) {
+      async function fetchUserProfile() {
+        try {
+          const response = await axios.post(
+            `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCR645Usau9CFI7QsbvX-fL7iehx-P4xU8`,
+            JSON.stringify({
+              idToken: authCtx.token,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          if (response.data && response.data.users.length > 0) {
+            const user = response.data.users[0];
+            const isProfileComplete = !!user.displayName && !!user.photoUrl;
+
+            authCtx.setProfileComplete(isProfileComplete);
+          }
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
+
+      fetchUserProfile();
+    }
+  }, [authCtx]);
 
   const handleLogout = () => {
     authCtx.logout();

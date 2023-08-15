@@ -66,7 +66,10 @@ const ExpenseForm = ({ onAddExpense, onUpdateExpense, editingExpense }) => {
             <option value="">Select Category</option>
             <option value="Food">Food</option>
             <option value="Petrol">Petrol</option>
-            <option value="Salary">Salary</option>
+            <option value="Mobile">Mobile</option>
+            <option value="Internet">Internet</option>
+            <option value="Travel">Travel</option>
+            <option value="Shopping">Shopping</option>
           </select>
         </div>
         <button type="submit" className="submit-button">
