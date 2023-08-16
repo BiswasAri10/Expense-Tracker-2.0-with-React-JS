@@ -6,6 +6,7 @@ import ExpensesList from "./ExpensesList";
 const ExpenseManager = () => {
   const [expenses, setExpenses] = useState([]);
   const [editingExpense, setEditingExpense] = useState(null);
+  const [showPremiumButton, setShowPremiumButton] = useState(false);
 
   useEffect(() => {
     async function fetchExpenses() {
@@ -24,6 +25,15 @@ const ExpenseManager = () => {
           ...expense,
         }));
         setExpenses(expensesArray);
+
+        // Calculate total expenses
+        const totalExpenses = expensesArray.reduce(
+          (total, expense) => total + parseFloat(expense.moneySpent),
+          0
+        );
+
+        // Set showPremiumButton based on total expenses
+        setShowPremiumButton(totalExpenses > 10000);
       } catch (error) {
         console.error(error);
       }
@@ -100,6 +110,7 @@ const ExpenseManager = () => {
         onUpdateExpense={handleUpdateExpense}
         editingExpense={editingExpense}
       />
+      {showPremiumButton && <button className="premium-button">Activate Premium</button>}
       <ExpensesList
         expenses={expenses}
         onDeleteExpense={handleDeleteExpense}
