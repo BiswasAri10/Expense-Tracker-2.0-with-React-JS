@@ -7,6 +7,7 @@ const ExpenseManager = () => {
   const [expenses, setExpenses] = useState([]);
   const [editingExpense, setEditingExpense] = useState(null);
   const [showPremiumButton, setShowPremiumButton] = useState(false);
+  const [premiumActivated, setPremiumActivated] = useState(false);
 
   useEffect(() => {
     async function fetchExpenses() {
@@ -26,13 +27,11 @@ const ExpenseManager = () => {
         }));
         setExpenses(expensesArray);
 
-        // Calculate total expenses
         const totalExpenses = expensesArray.reduce(
           (total, expense) => total + parseFloat(expense.moneySpent),
           0
         );
 
-        // Set showPremiumButton based on total expenses
         setShowPremiumButton(totalExpenses > 10000);
       } catch (error) {
         console.error(error);
@@ -40,7 +39,7 @@ const ExpenseManager = () => {
     }
 
     fetchExpenses();
-  }, []);
+  }, [expenses]);
 
   const handleAddExpense = async (newExpense) => {
     try {
@@ -77,7 +76,9 @@ const ExpenseManager = () => {
 
       if (response.status === 200) {
         const updatedExpenses = expenses.map((expense) =>
-          expense.id === editingExpense.id ? { ...expense, ...updatedExpense } : expense
+          expense.id === editingExpense.id
+            ? { ...expense, ...updatedExpense }
+            : expense
         );
         setExpenses(updatedExpenses);
         setEditingExpense(null);
@@ -103,6 +104,31 @@ const ExpenseManager = () => {
     }
   };
 
+  const handleActivatePremium = () => {
+    setPremiumActivated(true);
+  };
+
+  const handleDeactivatePremium = () => {
+    setPremiumActivated(false);
+  };
+
+  const handleDownloadCSV = () => {
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      expenses
+        .map(
+          (expense) =>
+            `${expense.moneySpent},${expense.expenseDescription},${expense.expenseCategory}`
+        )
+        .join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "expenses.csv");
+    document.body.appendChild(link);
+    link.click();
+  };
+
   return (
     <div>
       <ExpenseForm
@@ -110,7 +136,19 @@ const ExpenseManager = () => {
         onUpdateExpense={handleUpdateExpense}
         editingExpense={editingExpense}
       />
-      {showPremiumButton && <button className="premium-button">Activate Premium</button>}
+      {showPremiumButton && !premiumActivated && (
+        <button onClick={handleActivatePremium} className="premium-button">
+          Activate Premium
+        </button>
+      )}
+      {premiumActivated ? (
+        <>
+          <button onClick={handleDeactivatePremium} className="premium-button">
+            Deactivate Premium
+          </button>
+          <button onClick={handleDownloadCSV}>Download File</button>
+        </>
+      ) : null}
       <ExpensesList
         expenses={expenses}
         onDeleteExpense={handleDeleteExpense}
