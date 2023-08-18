@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../auth-store/AuthContext";
-import ExpenseManager from "../components/ExpenseManager";
+import ExpenseManager from "../components/Expenses/ExpenseManager";
 import "./Home.css";
 
 import axios from "axios";

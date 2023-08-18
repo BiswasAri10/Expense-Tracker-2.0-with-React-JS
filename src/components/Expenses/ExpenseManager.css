@@ -1,0 +1,41 @@
+.dark-theme {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+  
+  /* .light-theme {
+    background-color: #ffffff;
+    color: #1a1a1a;
+  } */
+  
+  .premium-button,
+  .download-button,
+  .theme-toggle-button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .premium-button {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  
+  .download-button {
+    background-color: #28a745;
+    color: #ffffff;
+  }
+  
+  .theme-toggle-button {
+    background-color: #333333;
+    color: #ffffff;
+  }
+  
+  .theme-toggle-button:hover {
+    background-color: #555555;
+  }
+  
+  
+  

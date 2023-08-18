@@ -1,6 +1,6 @@
 import { useState, useRef, useContext } from "react";
 import {Link, useNavigate } from "react-router-dom";
-import AuthContext from "../auth-store/AuthContext";
+import AuthContext from "../../auth-store/AuthContext";
 import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {

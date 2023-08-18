@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useTheme } from "../../auth-store/ThemeContext";
 import axios from "axios";
 import ExpenseForm from "./ExpenseForm";
 import ExpensesList from "./ExpensesList";
+import PremiumActivation from "../ActivatePremium";
+import "./ExpenseManager.css";
 
 const ExpenseManager = () => {
   const [expenses, setExpenses] = useState([]);
   const [editingExpense, setEditingExpense] = useState(null);
   const [showPremiumButton, setShowPremiumButton] = useState(false);
-  const [premiumActivated, setPremiumActivated] = useState(false);
+  const { toggleTheme } = useTheme(); 
 
   useEffect(() => {
     async function fetchExpenses() {
@@ -32,7 +35,18 @@ const ExpenseManager = () => {
           0
         );
 
-        setShowPremiumButton(totalExpenses > 10000);
+        if (totalExpenses > 10000) {
+          setShowPremiumButton(true);
+        } else {
+          setShowPremiumButton(false);
+          localStorage.removeItem("premiumActivated");
+          if (localStorage.getItem("darkTheme") === "true") {
+            localStorage.removeItem("darkTheme");
+            toggleTheme(); 
+          }
+          
+        }
+        
       } catch (error) {
         console.error(error);
       }
@@ -40,6 +54,23 @@ const ExpenseManager = () => {
 
     fetchExpenses();
   }, [expenses]);
+
+  const handleDownloadCSV = () => {
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      expenses
+        .map(
+          (expense) =>
+            `${expense.moneySpent},${expense.expenseDescription},${expense.expenseCategory}`
+        )
+        .join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "expenses.csv");
+    document.body.appendChild(link);
+    link.click();
+  };
 
   const handleAddExpense = async (newExpense) => {
     try {
@@ -104,31 +135,6 @@ const ExpenseManager = () => {
     }
   };
 
-  const handleActivatePremium = () => {
-    setPremiumActivated(true);
-  };
-
-  const handleDeactivatePremium = () => {
-    setPremiumActivated(false);
-  };
-
-  const handleDownloadCSV = () => {
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      expenses
-        .map(
-          (expense) =>
-            `${expense.moneySpent},${expense.expenseDescription},${expense.expenseCategory}`
-        )
-        .join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "expenses.csv");
-    document.body.appendChild(link);
-    link.click();
-  };
-
   return (
     <div>
       <ExpenseForm
@@ -136,19 +142,12 @@ const ExpenseManager = () => {
         onUpdateExpense={handleUpdateExpense}
         editingExpense={editingExpense}
       />
-      {showPremiumButton && !premiumActivated && (
-        <button onClick={handleActivatePremium} className="premium-button">
-          Activate Premium
-        </button>
+      {showPremiumButton && (
+        <PremiumActivation
+          onDownloadCSV={handleDownloadCSV}
+          onToggleTheme={toggleTheme}
+        />
       )}
-      {premiumActivated ? (
-        <>
-          <button onClick={handleDeactivatePremium} className="premium-button">
-            Deactivate Premium
-          </button>
-          <button onClick={handleDownloadCSV}>Download File</button>
-        </>
-      ) : null}
       <ExpensesList
         expenses={expenses}
         onDeleteExpense={handleDeleteExpense}
