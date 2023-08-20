@@ -1,22 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTheme } from "../../auth-store/ThemeContext";
 import axios from "axios";
 import ExpenseForm from "./ExpenseForm";
 import ExpensesList from "./ExpensesList";
 import PremiumActivation from "../ActivatePremium";
 import "./ExpenseManager.css";
+import AuthContext from "../../auth-store/AuthContext";
 
 const ExpenseManager = () => {
   const [expenses, setExpenses] = useState([]);
   const [editingExpense, setEditingExpense] = useState(null);
   const [showPremiumButton, setShowPremiumButton] = useState(false);
   const { toggleTheme } = useTheme(); 
+  const authCtx= useContext(AuthContext);
+  const currentUserEmail = authCtx?.email || "";
+  const modifiedEmail = currentUserEmail.replace(/[@.]/g, "");
 
   useEffect(() => {
     async function fetchExpenses() {
       try {
         const response = await fetch(
-          "https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses.json"
+          `https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses/${modifiedEmail}.json`
         );
 
         if (!response.ok) {
@@ -72,10 +76,10 @@ const ExpenseManager = () => {
     link.click();
   };
 
-  const handleAddExpense = async (newExpense) => {
+  const handleAddExpense = async (newExpense, userEmail) => {
     try {
       const response = await fetch(
-        "https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses.json",
+        `https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses/${modifiedEmail}.json`,
         {
           method: "POST",
           body: JSON.stringify(newExpense),
@@ -101,7 +105,7 @@ const ExpenseManager = () => {
   const handleUpdateExpense = async (editingExpense, updatedExpense) => {
     try {
       const response = await axios.put(
-        `https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses/${editingExpense.id}.json`,
+        `https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses/${modifiedEmail}/${editingExpense.id}.json`,
         updatedExpense
       );
 
@@ -122,7 +126,7 @@ const ExpenseManager = () => {
   const handleDeleteExpense = async (expense) => {
     try {
       const response = await axios.delete(
-        `https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses/${expense.id}.json`
+        `https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses/${modifiedEmail}/${expense.id}.json`
       );
 
       if (response.status === 200) {
@@ -138,7 +142,7 @@ const ExpenseManager = () => {
   return (
     <div>
       <ExpenseForm
-        onAddExpense={handleAddExpense}
+        onAddExpense={(newExpense) => handleAddExpense(newExpense, authCtx.email)}
         onUpdateExpense={handleUpdateExpense}
         editingExpense={editingExpense}
       />
