@@ -1,6 +1,11 @@
 import React, { useContext } from "react";
 import { useTheme } from "./auth-store/ThemeContext";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import AuthForm from "./components/Auth/AuthForm";
 import Home from "./pages/Home";
 import UpdateProfile from "./pages/ProfileUpdate";
@@ -21,16 +26,21 @@ function PrivateRoute({ element }) {
 function App() {
   const { darkTheme } = useTheme();
   return (
-    <div className={darkTheme ? "dark-theme" : "light-theme"}>
-    <Router> 
+    <Router>
       <Routes>
         <Route path="/" element={<AuthForm />} />
         <Route path="/forgot-password" element={<PasswordResetForm />} />
-        <Route path="/home" element={<PrivateRoute element={<Home />} />} />
-        <Route path="profile-update" element={<UpdateProfile />} />
+        <Route
+          path="/home"
+          element={
+            <div className={darkTheme ? "dark-theme" : "light-theme"}>
+              <PrivateRoute element={<Home />} />
+            </div>
+          }
+        />
+        <Route path="/profile-update" element={<UpdateProfile />} />
       </Routes>
     </Router>
-    </div>
   );
 }
 

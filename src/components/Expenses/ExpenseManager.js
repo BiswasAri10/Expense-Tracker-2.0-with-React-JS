@@ -57,17 +57,20 @@ const ExpenseManager = () => {
     }
 
     fetchExpenses();
-  }, [expenses]);
+  }, [expenses, modifiedEmail, toggleTheme]);
 
   const handleDownloadCSV = () => {
+    const headers = ["Money Spent", "Expense Description", "Expense Category"];
     const csvContent =
       "data:text/csv;charset=utf-8," +
+      headers.join(",") + "\n" +
       expenses
         .map(
           (expense) =>
             `${expense.moneySpent},${expense.expenseDescription},${expense.expenseCategory}`
         )
         .join("\n");
+    
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -75,8 +78,9 @@ const ExpenseManager = () => {
     document.body.appendChild(link);
     link.click();
   };
+  
 
-  const handleAddExpense = async (newExpense, userEmail) => {
+  const handleAddExpense = async (newExpense) => {
     try {
       const response = await fetch(
         `https://expense-tracker-data-e4ad9-default-rtdb.firebaseio.com/expenses/${modifiedEmail}.json`,

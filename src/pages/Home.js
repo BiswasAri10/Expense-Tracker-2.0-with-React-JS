@@ -81,7 +81,7 @@ const Home = () => {
       {authCtx.isLoggedIn && authCtx.profileComplete ? (
         <div>
           <p>Your profile is complete. You can start using the app now.</p>
-          <button onClick={handleVerifyEmail}>Verify Email</button>
+          <button className={'verify-email-button'} onClick={handleVerifyEmail}>Verify Email</button>
           <ExpenseManager />
         </div>
       ) : (
