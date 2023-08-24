@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const AuthContext = React.createContext({
   token: "",
@@ -22,7 +22,7 @@ export const AuthContextProvider = (props) => {
     initialProfileComplete
   );
 
-  const [logoutTimeout, setLogoutTimeout] = useState(null);
+  // const [logoutTimeout, setLogoutTimeout] = useState(null);
 
   const userIsLoggedIn = !!token;
 
@@ -37,7 +37,7 @@ export const AuthContextProvider = (props) => {
       localStorage.getItem("profileComplete") === "true";
     setProfileComplete(initialProfileComplete);
 
-    setLogoutTimeout(setTimeout(logoutHandler, 5 * 60 * 1000));
+    // setLogoutTimeout(setTimeout(logoutHandler, 5 * 60 * 1000));
   };
 
   const logoutHandler = () => {
@@ -50,22 +50,22 @@ export const AuthContextProvider = (props) => {
     const currentUserEmail = localStorage.getItem("email");
     localStorage.removeItem(`cartItems_${currentUserEmail}`);
 
-    if (logoutTimeout) {
-      clearTimeout(logoutTimeout);
-    }
+    // if (logoutTimeout) {
+    //   clearTimeout(logoutTimeout);
+    // }
   };
 
-  useEffect(() => {
-    if (userIsLoggedIn) {
-      setLogoutTimeout(setTimeout(logoutHandler, 5 * 60 * 1000));
-    }
+  // useEffect(() => {
+  //   if (userIsLoggedIn) {
+  //     setLogoutTimeout(setTimeout(logoutHandler, 5 * 60 * 1000));
+  //   }
 
-    return () => {
-      if (logoutTimeout) {
-        clearTimeout(logoutTimeout);
-      }
-    };
-  }, [userIsLoggedIn]);
+  //   return () => {
+  //     if (logoutTimeout) {
+  //       clearTimeout(logoutTimeout);
+  //     }
+  //   };
+  // }, [userIsLoggedIn]);
 
   useEffect(() => {
     localStorage.setItem("profileComplete", profileComplete);
